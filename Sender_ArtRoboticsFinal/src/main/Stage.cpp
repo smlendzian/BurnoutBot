@@ -2,14 +2,14 @@
 
 Stage::Stage(String name_val)
 :name(name_val),
-limitSwitch(LIMIT_SWITCH_PIN)
+limitSwitch("Limit Switch", LIMIT_SWITCH_PIN)
 {
     
 }
 
 void Stage::Start()
 {
-    Serial.print(Name() + "started");
+    Serial.println(Name() + " Started");
     
     //Task continues until ShouldEndTask is changed to true.
     //Then the program will return to the MainMenu

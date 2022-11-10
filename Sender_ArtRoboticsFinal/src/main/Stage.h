@@ -2,9 +2,7 @@
 #define Stage_h
 
 #include <Arduino.h>
-#include <ezButton.h>
-
-#define LIMIT_SWITCH_PIN 2
+#include "Devices.h"
 
 //Write this comment later
 class Stage
@@ -18,7 +16,7 @@ class Stage
 
     Stage(String name_val); //Stage is given a name for debugging purposes.
 
-    ezButton limitSwitch;
+    Button limitSwitch;
 
     //Starts the Stage and runs it until ShouldEndStage becomes true.
     void Start();
