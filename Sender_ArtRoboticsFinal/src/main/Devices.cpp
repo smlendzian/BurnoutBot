@@ -30,11 +30,11 @@ long DigitalSensor::ReadInput()
     //Prints to the Serial Monitor the value of the sensor when the sensor value changes.
     if(input_reading != previous_reading)
     {
-        Serial.print(Name());
-        Serial.print(" Port: ");
-        Serial.print(port);
-        Serial.print(F(" val: "));
-        Serial.println(input_reading);
+        //Serial.print(Name());
+        //Serial.print(" Port: ");
+        //Serial.print(port);
+        //Serial.print(F(" val: "));
+        //Serial.println(input_reading);
 
         previous_reading = input_reading;
     }
@@ -100,3 +100,4 @@ void Button::WaitForButtonClick()
     WaitForButtonPressed();
     WaitForButtonReleased();
 }
+

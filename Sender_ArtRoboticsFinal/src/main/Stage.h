@@ -11,10 +11,11 @@ class Stage
     bool ShouldEndStage = false; //Used to determine whether to return to the MainMenu
     String name;
     int points; //points will be decided for each stage
+    int finishStagePoints; //points needed to end the stage--determined for each stage
 
     public:
 
-    Stage(String name_val); //Stage is given a name for debugging purposes.
+    Stage(String name_val, int initial_points, int final_points); //Stage is given a name for debugging purposes.
 
     Button limitSwitch;
 
@@ -29,6 +30,9 @@ class Stage
     String Name();
 
     int getCurrentPoints();
+
+    //checks for a limit switch press, updates points accordingly, and sets ShouldEndStage to true if finishStagePoints is met
+    void checkForLimitSwitchPress();
 };
 
 #endif

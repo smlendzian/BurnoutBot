@@ -1,12 +1,12 @@
-#include "DefaultStage.h"
+#include "FirstStage.h"
 
-DefaultStage::DefaultStage()
-:Stage("DefaultStage", 0, 1)
+FirstStage::FirstStage()
+:Stage("FirstStage", 1, 10)
 {
     //Everything in this constructor is carried out when an instance of the DefaultStage class is created.
 }
 
-void DefaultStage::Run()
+void FirstStage::Run()
 {
     while(!ShouldEndStage) //Loop is redundant but used for clarity
     {
