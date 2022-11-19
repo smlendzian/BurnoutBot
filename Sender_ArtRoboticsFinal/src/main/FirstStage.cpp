@@ -6,10 +6,7 @@ FirstStage::FirstStage()
     //Everything in this constructor is carried out when an instance of the DefaultStage class is created.
 }
 
-void FirstStage::Run()
+void FirstStage::RunOutputs()
 {
-    while(!ShouldEndStage) //Loop is redundant but used for clarity
-    {
-        checkForLimitSwitchPress();
-    }
+    //Serial.println("StageOneOutputs");
 }

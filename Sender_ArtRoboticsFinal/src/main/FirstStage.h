@@ -9,9 +9,7 @@ class FirstStage : public Stage
 
     FirstStage();
 
-    //Keeps checking whether the limit switch is pressed, increases points appropriately
-    //Ends when points = 10
-    virtual void Run();
+    virtual void RunOutputs();
 };
 
 #endif

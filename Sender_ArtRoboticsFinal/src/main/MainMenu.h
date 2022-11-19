@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "DefaultStage.h"
 #include "FirstStage.h"
+#include "SecondStage.h"
 
 //The MainMenu class is used to cycle through each of the stages
 class MainMenu

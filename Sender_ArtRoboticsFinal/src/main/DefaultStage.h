@@ -10,8 +10,7 @@ class DefaultStage : public Stage
 
     DefaultStage();
 
-    //Keeps checking whether the limit switch is pressed and sets everything to its initial state
-    virtual void Run();
+    virtual void RunOutputs();
 };
 
 #endif

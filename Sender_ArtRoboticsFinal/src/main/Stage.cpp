@@ -1,12 +1,12 @@
 #include "Stage.h"
 
-Stage::Stage(String name_val, int initial_points, int final_points)
+Stage::Stage(String name_val, int initial_points, int final_points, bool should_start)
 :name(name_val),
 points(initial_points),
 finishStagePoints(final_points),
 limitSwitch("Limit Switch", LIMIT_SWITCH_PIN)
 {
-    
+    shouldReturnToDefaultStage = !should_start;
 }
 
 void Stage::Start()
@@ -15,9 +15,11 @@ void Stage::Start()
     
     //Task continues until ShouldEndTask is changed to true.
     //Then the program will return to the MainMenu
-    while(!ShouldEndStage) 
+    while(!ShouldEndStage && !shouldReturnToDefaultStage) 
     {
-        Run();
+        checkForLimitSwitchPress();
+        checkIfRanOutOfTime();
+        RunOutputs();
     } 
 }
 
@@ -29,6 +31,11 @@ String Stage::Name()
 int Stage::getCurrentPoints()
 {
     return points;
+}
+
+bool Stage::shouldNotReturnToDefaultStage()
+{
+    return !shouldReturnToDefaultStage;
 }
 
 void Stage::checkForLimitSwitchPress()
@@ -46,10 +53,40 @@ void Stage::checkForLimitSwitchPress()
         points++;
         Serial.print("Current Points: ");
         Serial.println(points);
+        timeAtLastSwitchPress = timer.getTimeSinceStartOfStageInMilliseconds();
+        timer.printTimeSinceStartOfStageToSerial();
+        warningHasBeenGiven = false;
     }
 
     if (points >= finishStagePoints)
     {
         ShouldEndStage = true; //Ends the loop in Stage::Start() to return to the MainMenu
+    }
+}
+
+void Stage::checkIfRanOutOfTime()
+{
+    if (name != "DefaultStage")
+    {
+        unsigned long timeSinceLastSwitchPress = timer.getTimeSinceStartOfStageInMilliseconds() - timeAtLastSwitchPress;
+        if (timeSinceLastSwitchPress >= MILLISECONDS_WITHOUT_INPUT_BEFORE_RETURN_TO_DEFAULT_STAGE)
+        {
+            Serial.print("TimeSinceLastSwitchPress(ms): ");
+            Serial.println(timeSinceLastSwitchPress);
+            Serial.println("Ran Out Of Time");
+            shouldReturnToDefaultStage = true;
+            ShouldEndStage = true;
+        } 
+        else if (timeSinceLastSwitchPress >= MILLISECONDS_WITHOUT_INPUT_BEFORE_WARNING)
+        {
+            if (!warningHasBeenGiven)
+            {
+                Serial.print("TimeSinceLastSwitchPress(ms): ");
+                Serial.println(timeSinceLastSwitchPress);
+                Serial.println("Keep Pushing Or Lose Your Points!");
+                warningHasBeenGiven = true;
+                //if statement to prevent sending the warning thousands of times
+            }    
+        }
     }
 }
