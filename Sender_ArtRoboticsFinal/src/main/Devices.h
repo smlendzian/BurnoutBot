@@ -2,8 +2,17 @@
 #define Devices_h
 
 #include <Arduino.h>
+#include "Timer.h"
 
 #define LIMIT_SWITCH_PIN 12
+#define LED_MATRIX_INPUT_PIN 5
+#define LED_MATRIX_POT_PIN 13
+#define SPEAKER_POT_PIN 14
+#define mp3TXPort 25
+#define mp3RXPort 26
+#define PUMP_MOTOR_PIN 32
+
+const int LCDrs = 19, LCDen = 23, LCDd4 = 18, LCDd5 = 17, LCDd6 = 16, LCDd7 = 15; //LCD pins
 
 //Class definition of a Device:
 class Device
@@ -67,6 +76,42 @@ class Button : public DigitalSensor
     void WaitForButtonPressed();
     void WaitForButtonReleased();
     void WaitForButtonClick(); //A "Click" is both a press and a release.
+};
+
+class AnalogSensor : public Device
+{
+    protected:
+    int port_location;
+    long previous_reading = 0;
+    
+    public:
+    AnalogSensor(String name_val, int port_num);
+
+    long ReadInput();
+};
+
+class Potentiometer : public AnalogSensor
+{
+    int output_lowest_value, output_highest_value;
+    
+    public:
+    Potentiometer(String name_val, int port_num, int output_lowest_val, int output_highest_val);
+    int ReadPotentiometerAndConvertToOutputValues();
+};
+
+class DCMotor : public Device
+{
+    Timer timer;
+    unsigned long timeMotorStarted;
+    bool motor_is_running;
+    
+    public:
+
+    DCMotor(String name_val, int port_num);
+
+    void startMotor();
+    void stopMotorIfEnoughTimeHasPassed(unsigned long millisecondsMotorShouldRun);
+    bool motorIsRunning();
 };
 
 #endif

@@ -5,6 +5,7 @@
 
 class FirstStage : public Stage
 {
+    HappyLEDFace ledFace;
     public:
 
     FirstStage();

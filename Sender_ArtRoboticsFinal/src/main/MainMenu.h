@@ -5,6 +5,8 @@
 #include "DefaultStage.h"
 #include "FirstStage.h"
 #include "SecondStage.h"
+#include "ThirdStage.h"
+#include "FourthStage.h"
 
 //The MainMenu class is used to cycle through each of the stages
 class MainMenu

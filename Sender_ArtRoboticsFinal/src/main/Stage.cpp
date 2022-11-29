@@ -4,8 +4,13 @@ Stage::Stage(String name_val, int initial_points, int final_points, bool should_
 :name(name_val),
 points(initial_points),
 finishStagePoints(final_points),
-limitSwitch("Limit Switch", LIMIT_SWITCH_PIN)
+limitSwitch("Limit Switch", LIMIT_SWITCH_PIN),
+lcd(LCDrs, LCDen, LCDd4, LCDd5, LCDd6, LCDd7)
 {
+    lcd.begin(2, 16);
+    lcd.setCursor(0, 0);
+    lcd.print("Points: ");
+    lcd.print(points);
     shouldReturnToDefaultStage = !should_start;
 }
 
@@ -17,6 +22,8 @@ void Stage::Start()
     //Then the program will return to the MainMenu
     while(!ShouldEndStage && !shouldReturnToDefaultStage) 
     {
+        MP3::instance().AdjustVolumeAsRequested();
+        MP3::instance().PlayBackgroundMusicIfIdle();
         checkForLimitSwitchPress();
         checkIfRanOutOfTime();
         RunOutputs();
@@ -53,6 +60,12 @@ void Stage::checkForLimitSwitchPress()
         points++;
         Serial.print("Current Points: ");
         Serial.println(points);
+
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Points: ");
+        lcd.print(points);
+
         timeAtLastSwitchPress = timer.getTimeSinceStartOfStageInMilliseconds();
         timer.printTimeSinceStartOfStageToSerial();
         warningHasBeenGiven = false;
@@ -84,9 +97,24 @@ void Stage::checkIfRanOutOfTime()
                 Serial.print("TimeSinceLastSwitchPress(ms): ");
                 Serial.println(timeSinceLastSwitchPress);
                 Serial.println("Keep Pushing Or Lose Your Points!");
+
+                lcd.setCursor(0, 1);
+                lcd.print("Keep Pushing!");
+
+                MP3::instance().AdjustVolumeAsRequested();
+                MP3::instance().Play(SPOKEN_TRACK_NUM);
+
                 warningHasBeenGiven = true;
                 //if statement to prevent sending the warning thousands of times
             }    
         }
     }
+}
+
+void Stage::initialize()
+{
+    lcd.begin(2, 16);
+    lcd.setCursor(0, 0);
+    lcd.print("Points: ");
+    lcd.print(points);
 }

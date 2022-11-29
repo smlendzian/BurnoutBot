@@ -4,8 +4,11 @@
 #include <Arduino.h>
 #include "Devices.h"
 #include "Timer.h"
+#include "LEDFace.h"
+#include <LiquidCrystal.h>
+#include "MP3.h"
 
-#define MILLISECONDS_WITHOUT_INPUT_BEFORE_RETURN_TO_DEFAULT_STAGE 10000
+#define MILLISECONDS_WITHOUT_INPUT_BEFORE_RETURN_TO_DEFAULT_STAGE 15000
 #define MILLISECONDS_WITHOUT_INPUT_BEFORE_WARNING 5000
 
 //Write this comment later
@@ -29,6 +32,8 @@ class Stage
 
     Button limitSwitch;
 
+    LiquidCrystal lcd;
+
     Timer timer;
 
     //Starts the Stage and runs it until ShouldEndStage becomes true.
@@ -47,6 +52,7 @@ class Stage
     //checks for a limit switch press, updates points accordingly, and sets ShouldEndStage to true if finishStagePoints is met
     void checkForLimitSwitchPress();
     void checkIfRanOutOfTime();
+    void initialize();
 };
 
 #endif

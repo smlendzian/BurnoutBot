@@ -8,5 +8,5 @@ DefaultStage::DefaultStage()
 
 void DefaultStage::RunOutputs()
 {
-    //Serial.println("DefaultStage Outputs");
+    ledFace.draw();
 }

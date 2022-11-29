@@ -5,6 +5,7 @@
 
 class SecondStage : public Stage
 {
+    NeutralLEDFace ledFace;
     public:
 
     SecondStage(bool should_start);

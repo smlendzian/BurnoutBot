@@ -101,3 +101,90 @@ void Button::WaitForButtonClick()
     WaitForButtonReleased();
 }
 
+AnalogSensor::AnalogSensor(String name_val, int port_num)
+:Device(name_val, port_num)
+{
+    pinMode(port, INPUT); 
+}
+
+long AnalogSensor::ReadInput()
+{
+    long input_reading = analogRead(port);
+    long reading_change = input_reading - previous_reading;
+
+    //For debugging:
+    //Prints to the Serial Monitor the value of the sensor when the sensor value changes a significant amount
+    if(abs(reading_change) > 1000)
+    {
+        Serial.print(Name());
+        Serial.print(F(" Port: "));
+        Serial.print(port);
+        Serial.print(F(" val: "));
+        Serial.println(input_reading);
+
+        previous_reading = input_reading;
+    }
+
+    return input_reading;
+}
+
+Potentiometer::Potentiometer(String name_val, int port_num, int output_lowest_val, int output_highest_val)
+:AnalogSensor(name_val, port_num),
+output_lowest_value(output_lowest_val),
+output_highest_value(output_highest_val)
+{
+    
+}
+
+int Potentiometer::ReadPotentiometerAndConvertToOutputValues()
+{
+    long input_reading = ReadInput();
+
+    //The potentiometer returns values between 0 and 4095 (when used with an ESP32)
+    int output_value = map(input_reading, 0, 4095, output_lowest_value, output_highest_value);
+
+    /*Serial.print("Input from ");
+    Serial.print(name);
+    Serial.print(": ");
+    Serial.println(input_reading);
+    
+    Serial.print("Output from ");
+    Serial.print(name);
+    Serial.print(": ");
+    Serial.println(output_value);*/
+
+    return output_value;
+}
+
+DCMotor::DCMotor(String name_val, int port_num)
+:Device(name_val, port_num),
+motor_is_running(false)
+{
+    pinMode(port, OUTPUT); 
+}
+
+void DCMotor::startMotor()
+{
+    digitalWrite(port, HIGH);
+    timeMotorStarted = timer.getTimeSinceStartOfStageInMilliseconds();
+    Serial.print(name);
+    Serial.println(": MotorStartedRunning");
+    motor_is_running = true;
+}
+
+void DCMotor::stopMotorIfEnoughTimeHasPassed(unsigned long millisecondsMotorShouldRun)
+{
+    unsigned long currentTime = timer.getTimeSinceStartOfStageInMilliseconds();
+    if (currentTime - timeMotorStarted > millisecondsMotorShouldRun)
+    {
+        digitalWrite(port, LOW);
+        Serial.print(name);
+        Serial.println(": MotorStoppedRunning");
+        motor_is_running = false;
+    }
+}
+
+bool DCMotor::motorIsRunning()
+{
+    return motor_is_running;
+}

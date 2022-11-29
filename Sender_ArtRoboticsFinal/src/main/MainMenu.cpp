@@ -24,4 +24,16 @@ void MainMenu::Start()
     Serial.print("Second Stage Ended. Current Points: ");
     points = secondStage.getCurrentPoints();
     Serial.println(points);
+
+    ThirdStage thirdStage(secondStage.shouldNotReturnToDefaultStage());
+    thirdStage.Start();
+    Serial.print("Third Stage Ended. Current Points: ");
+    points = thirdStage.getCurrentPoints();
+    Serial.println(points);
+
+    FourthStage fourthStage(thirdStage.shouldNotReturnToDefaultStage());
+    fourthStage.Start();
+    Serial.print("Fourth Stage Ended. Current Points: ");
+    points = fourthStage.getCurrentPoints();
+    Serial.println(points);
 }
