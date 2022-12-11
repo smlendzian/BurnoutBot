@@ -1,4 +1,4 @@
-# BurnOut-Bot-ChangeLater
+# Burnout Bot
 <b>Pavia &amp; Lendzian Final Project - OSU ART 4201 Fall 2022</b>
 
 <b>Artists' Statement</b>
